@@ -4,6 +4,6 @@
 
 <%= hidden_field_tag "order[payments_attributes][][payment_method_id]", payment_method.id %>
 
-<div>
+<div class="invisible">
 	<%= link_to I18n.t(:make_payment, scope: :mercado_pago), mercado_pago_checkout_path(payment_method_id: payment_method.id), method: :post , class: "button primary", id: "btnMercadoPago" %>
 </div>
