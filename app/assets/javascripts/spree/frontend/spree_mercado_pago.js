@@ -17,9 +17,29 @@ function bindMercadoPagoPaymentButton(){
     $("#payment-method-fields li").each(
         function(){
             if(($(this).find('label').text().match(/^\s+Mercado Pago\s+$/)) && ($(this).find('input').is(":checked"))){
-                $('#go_to_confirm').bind('click',function(){});
+                $('#go_to_confirm').unbind('click');
                 $('#go_to_confirm').attr('type','button');
-                $('#go_to_confirm').bind('click',$('#btnMercadoPago').click());
+                $('#go_to_confirm').bind('click',function(){$('#btnMercadoPago').click()});
+            }
+        }
+    ); 
+}
+
+function unbindMercadoPagoPaymentButton(){
+    $('#go_to_confirm').attr('type','submit');
+    $('#go_to_confirm').unbind('click');
+}
+
+function bindMercadoPagoPaymentMethod(){
+    $("#payment-method-fields li").each(
+        function(){
+            if($(this).find('label').text().match(/^\s+Mercado Pago\s+$/)){
+                $(this).unbind('click');
+                $(this).bind('click',bindMercadoPagoPaymentButton);
+            }
+            else{
+                $(this).unbind('click');
+                $(this).bind('click',unbindMercadoPagoPaymentButton);
             }
         }
     ); 
@@ -34,4 +54,5 @@ jQuery(document).ready(function() {
   jQuery('button.mercado_pago_button').click(function(event){
     jQuery(event.target).prop("disabled",true);
   });
+
 });
