@@ -1,0 +1,10 @@
+<script>
+  bindMercadoPagoPaymentButton();
+  bindMercadoPagoPaymentMethod();
+
+  jQuery('#payment-method-fields li').each(function(){
+      if(jQuery(this).find('label').text().match(/^\s+Mercado Pago\s+$/)){
+         jQuery(this).find('label').after(jQuery('#img_mp')); 
+      }
+  });
+</script>
