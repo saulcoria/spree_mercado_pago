@@ -63,12 +63,12 @@ module Spree
 
       if notification.save
         MercadoPago::HandleReceivedNotification.new(notification).process!
-        status = :ok
+        status = 200
       else
-        status = :bad_request
+        status = 400
       end
 
-      render nothing: true, status: status
+      head status, content_type: "text/html"
     end
 
     private
