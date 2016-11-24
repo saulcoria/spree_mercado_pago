@@ -58,17 +58,37 @@ module Spree
     end
 
     def ipn
-      notification = MercadoPago::Notification.
-        new(operation_id: params[:id], topic: params[:topic])
+      begin
+        logger = Logger.new("#{Rails.root}/log/ipn_notifications.log", 'daily')
+        logger.info("-----------------------------------------")
+        logger.info("Iniciando recepción de notificaciones IPN")
+        logger.info("--------------------")
 
-      if notification.save
-        MercadoPago::HandleReceivedNotification.new(notification).process!
-        status = :ok
-      else
-        status = :bad_request
+        notification = MercadoPago::Notification.
+                       new(operation_id: params[:id], topic: params[:topic])
+
+        if notification.save
+          begin
+            MercadoPago::HandleReceivedNotification.new(notification).process!
+          rescue Exception => a
+            logger.debug("Error al procesar la notificación.")
+            logger.debug("Error: #{a.to_s}")
+          end
+        end
+
+        logger.info("Notificacion procesada correctamente")
+        logger.info("--------------------")
+        logger.info("Devolviendo STATUS 200 OK")
+      rescue Exception => e
+        logger.debug("Error al procesar la notificación")
+        logger.debug("Error: #{e.to_s}")
+        logger.info("--------------------")
+
+        logger.info("Devolviendo igualmente, STATUS 200 OK")
       end
+      logger.info("-----------------------------------------")
 
-      render nothing: true, status: status
+      render nothing: true, status: 200, content_type: "text/html"
     end
 
     private
