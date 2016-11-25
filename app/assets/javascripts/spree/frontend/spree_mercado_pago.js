@@ -1,4 +1,3 @@
-//= require spree/frontend
 MercadoPago = {
   hidePaymentSaveAndContinueButton: function(paymentMethod) {
     if (MercadoPago.paymentMethodID && paymentMethod.val() == MercadoPago.paymentMethodID) {
