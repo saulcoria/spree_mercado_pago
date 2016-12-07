@@ -1,0 +1,6 @@
+<script>
+  bindMercadoPagoPaymentMethod();
+
+  jQuery("#payment-method-fields li label [data-gateway='Spree::PaymentMethod::MercadoPago']").data('gateway-custom', true)
+  jQuery('#payment-method-fields li label [data-gateway="Spree::PaymentMethod::MercadoPago"]').parent().after(jQuery('#img_mp')); 
+</script>
