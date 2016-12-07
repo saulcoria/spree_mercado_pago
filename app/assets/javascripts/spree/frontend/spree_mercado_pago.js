@@ -10,45 +10,21 @@ MercadoPago = {
   }
 };
 
-function bindMercadoPagoPaymentButton(){
-    $('#go_to_confirm').attr('type','submit');
-
-    $("#payment-method-fields li").each(
-        function(){
-            if(($(this).find('label').text().match(/^\s+Mercado Pago\s+$/)) && ($(this).find('input').is(":checked"))){
-                $('#go_to_confirm').unbind('click');
-                $('#go_to_confirm').attr('type','button');
-                $('#go_to_confirm').bind('click',function(){$('#btnMercadoPago').click()});
-            }
-        }
-    ); 
-}
-
-function unbindMercadoPagoPaymentButton(){
-    $('#go_to_confirm').attr('type','submit');
-    $('#go_to_confirm').unbind('click');
+function bindMercadoPagoPaymentButton() {
+  jQuery('#go_to_confirm').unbind('click');
+  jQuery('#go_to_confirm').attr('type','button');
+  jQuery('#go_to_confirm').bind('click',function(){jQuery('#btnMercadoPago').click()});  
 }
 
 function bindMercadoPagoPaymentMethod(){
-    $("#payment-method-fields li").each(
-        function(){
-            if($(this).find('label').text().match(/^\s+Mercado Pago\s+$/)){
-                $(this).unbind('click');
-                $(this).bind('click',bindMercadoPagoPaymentButton);
-            }
-            else{
-                $(this).unbind('click');
-                $(this).bind('click',unbindMercadoPagoPaymentButton);
-            }
-        }
-    ); 
+  jQuery("#payment-method-fields li label [data-gateway='Spree::PaymentMethod::MercadoPago']").click(bindMercadoPagoPaymentButton);  
 }
 
 jQuery(document).ready(function() {
   checkedPaymentMethod = jQuery('#order_payments_attributes__payment_method_id');
   MercadoPago.hidePaymentSaveAndContinueButton(checkedPaymentMethod);
   paymentMethods = jQuery('#order_payments_attributes__payment_method_id').click(function (e) {
-    MercadoPago.hidePaymentSaveAndContinueButton($(e.target));
+    MercadoPago.hidePaymentSaveAndContinueButton(jQuery(e.target));
   });
   jQuery('button.mercado_pago_button').click(function(event){
     jQuery(event.target).prop("disabled",true);

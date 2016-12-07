@@ -1,10 +1,6 @@
 <script>
-  bindMercadoPagoPaymentButton();
   bindMercadoPagoPaymentMethod();
 
-  jQuery('#payment-method-fields li').each(function(){
-      if(jQuery(this).find('label').text().match(/^\s+Mercado Pago\s+$/)){
-         jQuery(this).find('label').after(jQuery('#img_mp')); 
-      }
-  });
+  jQuery("#payment-method-fields li label [data-gateway='Spree::PaymentMethod::MercadoPago']").data('gateway-custom', true)
+  jQuery('#payment-method-fields li label [data-gateway="Spree::PaymentMethod::MercadoPago"]').parent().after(jQuery('#img_mp')); 
 </script>
