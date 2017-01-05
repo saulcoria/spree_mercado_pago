@@ -11,7 +11,7 @@ describe MercadoPago::Client do
   let(:order) { double('order', payment_method: payment_method, number: 'testorder', line_items: [], ship_total: 1000) }
   let(:url_callbacks) { {success: 'url', failure: 'url', pending: 'url'} }
   let(:payment_method) { double :payment_method, id: 1, preferred_client_id: 'app id', preferred_client_secret: 'app secret' }
-  let(:payment) {double :payment, payment_method:payment_method, id:1, identifier:"fruta" }
+  let(:payment) {double :payment, payment_method:payment_method, id:1, number:"fruta" }
 
   let(:login_json_response)  do
     File.open("#{SPEC_ROOT}/../fixtures/authenticated.json").read
