@@ -2,6 +2,10 @@ require 'json'
 
 class MercadoPago::Client
   module API
+    def initialize
+      @logger ||=  Logger.new("#{Rails.root}/log/ipn_notifications.log", 'daily')
+    end
+
     def redirect_url
       point_key = sandbox ? 'sandbox_init_point' : 'init_point'
       @preferences_response[point_key]
@@ -11,6 +15,8 @@ class MercadoPago::Client
 
     def notifications_url(operation_id)
       sandbox_part = sandbox ? 'sandbox/' : ''
+
+      @logger.info("Url de notificación:.....https://api.mercadolibre.com/#{sandbox_part}collections/notifications/#{operation_id}..........")
       "https://api.mercadolibre.com/#{sandbox_part}collections/notifications/#{operation_id}"
     end
 
