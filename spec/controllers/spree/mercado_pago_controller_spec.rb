@@ -13,7 +13,7 @@ module Spree
           use_case.should_receive(:process!)
 
           spree_post :ipn, { id: operation_id, topic: "payment" }
-          response.should be_success
+          expect(response.success?).to be true
 
           notification = ::MercadoPago::Notification.order(:created_at).last
           notification.topic.should eq("payment")
@@ -22,9 +22,9 @@ module Spree
       end
 
       describe "for invalid notification" do
-        it "responds with invalid request" do
+        it "responds with 200 OK" do
           spree_post :ipn, { id: operation_id, topic: "nonexistent_topic" }
-          response.should be_bad_request
+          expect(response.bad_request?).to be false
         end
       end
     end

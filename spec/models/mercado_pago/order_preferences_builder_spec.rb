@@ -59,7 +59,7 @@ describe "OrderPreferencesBuilder" do
       end
 
       it "should only have line items and adjustments in items" do
-        expect(subject[:items]).to have(order.line_items.count + order.adjustments.count).items
+        expect(subject[:items].size).to eq(order.line_items.count + order.adjustments.count)
       end
     end
   end
