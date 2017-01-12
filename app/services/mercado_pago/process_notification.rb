@@ -8,7 +8,6 @@
 # If not found
 #   Ignore notification (maybe payment from outside Spree)
 
-require 'byebug'
 module MercadoPago
   class ProcessNotification
     # Equivalent payment states
@@ -42,7 +41,7 @@ module MercadoPago
       if notification.topic == "merchant_order"
         merchant_info = client.get_operation_info(notification.operation_id,notification.topic)
         if merchant_info["payments"] == []
-          payment = Spree::Payment.where(identifier: merchant_info["external_reference"]).first
+          payment = Spree::Payment.where(number: merchant_info["external_reference"]).first
           payment.pend
           payment.order.updater.update
           payment.order.next
