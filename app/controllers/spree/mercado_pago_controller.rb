@@ -54,6 +54,8 @@ module Spree
         logger.info("Iniciando recepción de notificaciones IPN")
         logger.info("--------------------")
         logger.info("Datos de la operacion:...Operation id:...#{params[:id]}....Topic:...#{params[:topic]}....")
+        logger.info("Datos de los parametros:...params...#{params}...")
+        logger.info("Datos de la request:..URL:..#{request.url}..POST:..#{request.post?}...")
 
         notification = MercadoPago::Notification.
           new(operation_id: params[:id], topic: params[:topic])
