@@ -24,8 +24,12 @@ module Spree
     # if required.
     def success
       if params["collection_status"] == "approved"
-        payment.complete!
-        payment.order.next
+        # NOTE SE VALIDA QUE EL PAGO NO SE HAYA COMPLETADO POR IPN
+        unless payment.state == "completed"
+          payment.complete!
+          payment.order.next
+        end
+
         flash.notice = Spree.t(:order_processed_successfully)
         flash['order_completed'] = true
       end

@@ -5,6 +5,7 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require 'rubygems'
+require 'devise'
 
 # Configure Rails Environment
 ENV['RAILS_ENV'] = 'test'
@@ -39,6 +40,7 @@ RSpec.configure do |config|
   # visit spree.admin_path
   # current_path.should eql(spree.products_path)
   config.include Spree::TestingSupport::UrlHelpers
+  config.include Devise::TestHelpers, type: :controller
 
   # == Mock Framework
   #
