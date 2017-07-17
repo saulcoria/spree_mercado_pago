@@ -35,21 +35,13 @@ module MercadoPago
       get(url, options)
     end
 
-
-    # def get_external_reference(operation_id)
-    #   response = send_notification_request(operation_id)
-    #   if response
-    #     response['collection']['external_reference']
-    #   end
-    # end
-
     def get_payment_status(external_reference)
-      response = send_search_request({external_reference: external_reference, access_token: access_token})
+      response = send_payments_request({external_reference: external_reference, access_token: access_token})
 
       if response['results'].empty?
-        "pending"
+        "no_response"
       else
-        response['results'][0]['collection']['status']
+        response['results'][0]['status']
       end
     end
 
@@ -64,6 +56,12 @@ module MercadoPago
 
     def send_search_request(params, options={})
       url = create_url(search_url, params)
+      options = {content_type: 'application/x-www-form-urlencoded', accept: 'application/json'}
+      get(url, options)
+    end
+
+    def send_payments_request(params, options={})
+      url = create_url(payments_url, params)
       options = {content_type: 'application/x-www-form-urlencoded', accept: 'application/json'}
       get(url, options)
     end
