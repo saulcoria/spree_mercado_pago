@@ -35,8 +35,11 @@ module Spree
       end
 
       if params["collection_status"] == "pending"
-        payment.pend!
-        payment.order.next
+        unless payment.state == "pending"
+          payment.pend!
+          payment.order.next unless payment.order.state == "complete"
+        end
+
         flash.notice = Spree.t(:payment_processing_pending)
         flash['order_completed'] = false
       end
