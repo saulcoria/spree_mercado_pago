@@ -27,6 +27,11 @@ class MercadoPago::Client
       "https://api.mercadolibre.com/#{sandbox_part}collections/search"
     end
 
+    def payments_url
+      sandbox_part = sandbox ? 'sandbox/' : ''
+      "https://api.mercadopago.com/#{sandbox_part}v1/payments/search"
+    end
+
     def create_url(url, params={})
       uri = URI(url)
       uri.query = URI.encode_www_form(params)
