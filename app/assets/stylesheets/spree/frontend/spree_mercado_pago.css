@@ -1,1 +1,7 @@
 /* Custom frontend assets */
+.img-tarjetas-mp{
+    width:240px;
+    display:inline !important;
+    margin-left:25px;
+    vertical-align:text-top !important;
+}

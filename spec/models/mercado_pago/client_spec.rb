@@ -11,7 +11,7 @@ describe MercadoPago::Client do
   let(:order) { double('order', payment_method: payment_method, number: 'testorder', line_items: [], ship_total: 1000) }
   let(:url_callbacks) { {success: 'url', failure: 'url', pending: 'url'} }
   let(:payment_method) { double :payment_method, id: 1, preferred_client_id: 'app id', preferred_client_secret: 'app secret' }
-  let(:payment) {double :payment, payment_method:payment_method, id:1, identifier:"fruta" }
+  let(:payment) {double :payment, payment_method:payment_method, id:1, number:"fruta" }
 
   let(:login_json_response)  do
     File.open("#{SPEC_ROOT}/../fixtures/authenticated.json").read
@@ -66,7 +66,7 @@ describe MercadoPago::Client do
         response
       end
 
-      before(:each) do  
+      before(:each) do
         RestClient.should_receive(:post) { raise RestClient::Exception.new "foo" }
       end
 
@@ -78,13 +78,23 @@ describe MercadoPago::Client do
     end
   end
 
-  describe '#check_payment_status' do
-    let(:collection) { {} }
-    let(:expected_response) { {results: [collection: collection]} }
+  describe '#get_payment_status' do
+    context 'On success' do
+      let(:http_response) {
+        response = double('response')
+        response.stub(:code) { 200 }
+        response.stub(:to_str) { login_json_response }
+        response
+      }
+      let(:js_response) { JSON.parse(http_response) }
 
-    before :each do
-      allow(subject).to receive(:send_search_request).with({:external_reference => payment.id}).and_return(expected_response)
-      allow(subject).to receive(:check_status).with(payment, {})
+      before(:each) do
+        expect(client).to receive(:get_payment_status).and_return( js_response )
+      end
+
+      it 'return status' do
+        expect(client.get_payment_status("PCJLDIE3")).not_to eq(nil)
+      end
     end
   end
 

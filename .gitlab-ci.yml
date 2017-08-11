@@ -1,0 +1,34 @@
+stages:
+  - test
+before_script:
+  - gem install bundle
+  - bundle install
+  - rake test_app
+  - cp -n -p dummy_migrations/* spec/dummy/db/migrate
+  - cd spec/dummy && rake db:drop RAILS_ENV=test && rake db:create RAILS_ENV=test && rake db:migrate RAILS_ENV=test
+  - cd ../..
+
+spec:controllers:
+  stage: test
+  script: 
+   - rspec spec/controllers
+  tags:
+    - ruby22
+spec:mailers:
+  stage: test
+  script: 
+   - rspec spec/mailers
+  tags:
+    - ruby22
+spec:models:
+  stage: test
+  script: 
+   - rspec spec/models
+  tags:
+    - ruby22
+#spec:frontend:
+#  stage: test
+#  script: 
+#   - rspec spec/frontend
+#  tags:
+#    - ruby22

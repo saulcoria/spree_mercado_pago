@@ -13,9 +13,9 @@ module MercadoPago
 
     def preferences_hash
       {
-				external_reference: @payment.number,
+        external_reference: @payment.number,
         back_urls: @callback_urls,
-        payer: @payer_data,
+        payer: generate_payer_data,
         items: generate_items
       }
     end
@@ -63,6 +63,28 @@ module MercadoPago
           currency_id: "ARS"
         }
       end
+    end
+
+    def generate_payer_data
+      {
+        :name => @payer_data.firstname,
+        :surname => @payer_data.lastname,
+        :email => @order.user.email,
+        :phone => {
+          :area_code => '54',
+          :number => @payer_data.phone.to_s
+        },
+        :identification => {
+          :type => 'DNI',
+          :number => @payer_data.dni.to_s
+        },
+        :address => {
+          :zip_code => @payer_data.zipcode.to_s,
+          :street_name => @payer_data.address1,
+          :street_number => @payer_data.address2.to_i
+        },
+        :date_created => @order.user.created_at.iso8601
+      }
     end
   end
 end

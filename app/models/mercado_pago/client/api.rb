@@ -9,14 +9,27 @@ class MercadoPago::Client
 
     private
 
-    def notifications_url(operation_id)
+    def merchant_orders_url(operation_id)
       sandbox_part = sandbox ? 'sandbox/' : ''
+      "https://api.mercadolibre.com/#{sandbox_part}merchant_orders/#{operation_id}"
+    end
+
+    def notifications_url(operation_id)
+      @logger ||=  Logger.new("#{Rails.root}/log/ipn_notifications.log", 'daily')
+      sandbox_part = sandbox ? 'sandbox/' : ''
+
+      @logger.info("Url de notificación:.....https://api.mercadolibre.com/#{sandbox_part}collections/notifications/#{operation_id}..........")
       "https://api.mercadolibre.com/#{sandbox_part}collections/notifications/#{operation_id}"
     end
 
     def search_url
       sandbox_part = sandbox ? 'sandbox/' : ''
       "https://api.mercadolibre.com/#{sandbox_part}collections/search"
+    end
+
+    def payments_url
+      sandbox_part = sandbox ? 'sandbox/' : ''
+      "https://api.mercadopago.com/#{sandbox_part}v1/payments/search"
     end
 
     def create_url(url, params={})
@@ -37,6 +50,9 @@ class MercadoPago::Client
       response = RestClient.get(url, request_options)
       JSON.parse(response)
     rescue => e
+      logger = Logger.new("#{Rails.root}/log/ipn_notifications.log", 'daily')
+      logger.info("Error en get....#{e.to_s}....")
+      logger.info("Backtrace en get....#{e.backtrace.to_s}....")
       raise e unless options[:quiet]
     end
   end
