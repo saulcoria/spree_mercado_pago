@@ -33,6 +33,7 @@ module MercadoPago
 
     def initialize(notification)
       @notification = notification
+      @logger ||=  Logger.new("#{Rails.root}/log/ipn_notifications.log", 'daily')
     end
 
     def process!
@@ -40,6 +41,8 @@ module MercadoPago
       client = ::Spree::PaymentMethod.where(type: "Spree::PaymentMethod::MercadoPago").first.provider
       if notification.topic == "merchant_order"
         merchant_info = client.get_operation_info(notification.operation_id,notification.topic)
+        @logger.info("Información de operacion.....#{merchant_info}...")
+
         if merchant_info["payments"] == []
           payment = Spree::Payment.where(number: merchant_info["external_reference"]).first
           payment.pend
@@ -68,6 +71,8 @@ module MercadoPago
         end
       elsif notification.topic == "payment"
         op_info = client.get_operation_info(notification.operation_id,notification.topic)["collection"]
+        @logger.info("Información del pago.....#{op_info}...")
+
         if payment = Spree::Payment.where(number: op_info["external_reference"]).first
           if STATES[:complete].include?(op_info["status"])
             payment.complete

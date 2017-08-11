@@ -12,7 +12,7 @@ describe "OrderPreferencesBuilder" do
 
   let(:payment)       { create(:payment) }
   let(:callback_urls) { {success: "http://example.com/success", pending: "http://example.com/pending", failure: "http://example.com/failure"} }
-  let(:payer_data)    { {email:"jmperez@devartis.com"} }
+  let(:payer_data)    { create(:address, dni: 23987221) }
 
   include ActionView::Helpers::TextHelper
   include ActionView::Helpers::SanitizeHelper
@@ -30,7 +30,27 @@ describe "OrderPreferencesBuilder" do
     end
 
     it "should set payer data if brought" do
-      expect(subject).to include(payer: payer_data)
+      hs_payer_data = {
+        :name => payer_data.firstname,
+        :surname => payer_data.lastname,
+        :email => order.user.email,
+        :phone => {
+          :area_code => '54',
+          :number => payer_data.phone.to_s
+        },
+        :identification => {
+          :type => 'DNI',
+          :number => payer_data.dni.to_s
+        },
+        :address => {
+          :zip_code => payer_data.zipcode.to_s,
+          :street_name => payer_data.address1,
+          :street_number => payer_data.address2.to_i
+        },
+        :date_created => order.user.created_at.iso8601
+      }
+
+      expect(subject).to include(payer: hs_payer_data)
     end
 
     it "should set an item for every line item" do

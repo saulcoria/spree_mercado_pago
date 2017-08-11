@@ -12,7 +12,7 @@ module Spree
       payment = current_order.payments.create!({amount: current_order.total, payment_method: payment_method})
       payment.started_processing!
 
-      preferences = ::MercadoPago::OrderPreferencesBuilder.new(current_order, payment, callback_urls).preferences_hash
+      preferences = ::MercadoPago::OrderPreferencesBuilder.new(current_order, payment, callback_urls, current_order.bill_address).preferences_hash
 
       provider = payment_method.provider
       provider.create_preferences(preferences)
