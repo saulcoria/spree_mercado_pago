@@ -69,7 +69,7 @@ module MercadoPago
       {
         :name => @payer_data.firstname,
         :surname => @payer_data.lastname,
-        :email => @order.user.email,
+        :email => @order.user ? @order.user.email : @order.email,
         :phone => {
           :area_code => '54',
           :number => @payer_data.phone.to_s
@@ -83,7 +83,7 @@ module MercadoPago
           :street_name => @payer_data.address1,
           :street_number => @payer_data.address2.to_i
         },
-        :date_created => @order.user.created_at.iso8601
+        :date_created => @order.user ? @order.user.created_at.iso8601 : @order.created_at.iso8601
       }
     end
   end
