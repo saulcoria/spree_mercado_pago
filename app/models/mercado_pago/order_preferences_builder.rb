@@ -28,7 +28,6 @@ module MercadoPago
       items += generate_items_from_line_items
       items += generate_items_from_adjustments
       items += generate_items_from_shipments
-      items[0][:unit_price] += @order.promo_total.to_f
 
       items
     end
