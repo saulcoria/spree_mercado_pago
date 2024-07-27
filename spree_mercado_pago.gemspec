@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email       = 'manuca@gmail.com'
   s.license     = 'MIT'
 
-  s.add_dependency 'spree_core',  '~> 3.0.6'
+  s.add_dependency 'spree_core',  '~> 4.7.3'
   s.add_dependency 'rest-client', '~> 1.7'
 
   s.add_development_dependency 'capybara', '~> 2.6'
